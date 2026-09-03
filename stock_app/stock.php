@@ -1,0 +1,21 @@
+<?php
+require "seguridad.php";
+requerirPaginaAutenticada();
+
+$destinos = [
+    "admin" => "admin.php",
+    "vendedor" => "vendedor.php",
+    "cliente" => "cliente.php",
+];
+
+$rol = $_SESSION["usuario_rol"] ?? "";
+if (!isset($destinos[$rol])) {
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+    exit;
+}
+
+$sufijo = isset($_GET["mfa_configurado"]) ? "?mfa_configurado=1" : "";
+header("Location: " . $destinos[$rol] . $sufijo);
+exit;
